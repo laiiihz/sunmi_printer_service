@@ -1,11 +1,11 @@
 name: sunmi_printer_service
 description: 商米打印服务
 version: 0.1.0
-homepage:
+repository: https://github.com/laiiihz/sunmi_printer_service
 
 environment:
   sdk: ">=2.12.0 <3.0.0"
-  flutter: ">=1.20.0"
+  flutter: ">=2.0.0"
 
 dependencies:
   flutter:

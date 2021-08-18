@@ -21,6 +21,7 @@ class SunmiPrinterServicePlugin : FlutterPlugin, MethodCallHandler, ActivityAwar
     private lateinit var activity: Activity
     private lateinit var sunmiService: SunmiPrinterService
     private lateinit var innerResultCallback: InnerResultCallback
+    private var inited: Boolean = false
     override fun onAttachedToEngine(@NonNull flutterPluginBinding: FlutterPlugin.FlutterPluginBinding) {
         channel = MethodChannel(flutterPluginBinding.binaryMessenger, "sunmi_printer_service")
         channel.setMethodCallHandler(this)
@@ -36,6 +37,7 @@ class SunmiPrinterServicePlugin : FlutterPlugin, MethodCallHandler, ActivityAwar
                         Log.d("sunmi", "connected to service")
                         if (service != null) {
                             sunmiService = service
+                            inited = true
                         } else {
                             //TODO fail
                         }
@@ -69,17 +71,21 @@ class SunmiPrinterServicePlugin : FlutterPlugin, MethodCallHandler, ActivityAwar
                 result.success(initResult)
             }
             "unbind" -> {
-                val innerPrinterCallback = object : InnerPrinterCallback() {
-                    override fun onConnected(service: SunmiPrinterService?) {
-                        Log.d("sunmi", "connected to service")
-                    }
+                if (!inited) {
+                    result.success(true)
+                } else {
+                    val innerPrinterCallback = object : InnerPrinterCallback() {
+                        override fun onConnected(service: SunmiPrinterService?) {
+                            Log.d("sunmi", "connected to service")
+                        }
 
-                    override fun onDisconnected() {
-                        Log.w("sunmi", "disconnected to service")
+                        override fun onDisconnected() {
+                            Log.w("sunmi", "disconnected to service")
+                        }
                     }
+                    printerManager.unBindService(context, innerPrinterCallback)
+                    result.success(true)
                 }
-                printerManager.unBindService(context, innerPrinterCallback)
-                result.success(true)
             }
             "text" -> {
                 val text = call.argument<String>("text")

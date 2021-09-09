@@ -18,7 +18,7 @@ class SunmiPrinterServicePlugin : FlutterPlugin, MethodCallHandler, ActivityAwar
     private lateinit var channel: MethodChannel
     private lateinit var printerManager: InnerPrinterManager
     private lateinit var context: Context
-    private lateinit var activity: Activity
+    private var activity: Activity? = null
     private lateinit var sunmiService: SunmiPrinterService
     private lateinit var innerResultCallback: InnerResultCallback
     private var inited: Boolean = false
@@ -195,14 +195,14 @@ class SunmiPrinterServicePlugin : FlutterPlugin, MethodCallHandler, ActivityAwar
     }
 
     override fun onDetachedFromActivityForConfigChanges() {
-        TODO("Not yet implemented")
+
     }
 
     override fun onReattachedToActivityForConfigChanges(binding: ActivityPluginBinding) {
-        TODO("Not yet implemented")
+        activity = binding.activity
     }
 
     override fun onDetachedFromActivity() {
-        TODO("Not yet implemented")
+        activity = null
     }
 }

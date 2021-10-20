@@ -180,6 +180,13 @@ class SunmiPrinterServicePlugin : FlutterPlugin, MethodCallHandler, ActivityAwar
                 )
                 result.success(null)
             }
+            "cutPaper" -> {
+                sunmiService.cutPaper(innerResultCallback)
+                result.success(null)
+            }
+            "cutPaperTimes" -> {
+                result.success(sunmiService.getCutPaperTimes())
+            }
             else -> {
                 result.notImplemented()
             }

@@ -143,4 +143,17 @@ class SPrinter {
       'errorLevel': errorLevel.value,
     });
   }
+
+  /// 切纸
+  /// 仅支持台式机带切刀的机器
+  static cutPaper() async {
+    await _channel.invokeMethod('cutPaper');
+  }
+
+  /// 切纸次数
+  static Future<int?> cutPaperTimes() async {
+    var result = await _channel.invokeMethod('cutPaperTimes');
+    if (result == null) return null;
+    if (result is int) return result;
+  }
 }
